@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	kPathAuthorize         = "/oauth/v2/authorize"
 	kPathOAuthAccountToken = "/oauth/v2/app-account-token"
 	kPathOAuthToken        = "/oauth/v2/token"
 	kPathUserInfo          = "/oauth/v2/userinfo"
@@ -17,6 +18,18 @@ const (
 	kGrantTypeAuthorizationCode = "authorization_code"
 	kGrantTypeRefreshToken      = "refresh_token"
 )
+
+// GetAuthorizeURL 获取前端发起授权URL https://docs.qq.com/open/document/app/oauth2/authorize.html
+func (c *Client) GetAuthorizeURL(redirectURI, state string) *url.URL {
+	var values = url.Values{}
+	values.Set("client_id", c.clientId)
+	values.Set("redirect_uri", redirectURI)
+	values.Set("response_type", "code")
+	values.Set("scope", "all")
+	values.Set("state", state)
+	var nURL, _ = url.Parse(c.buildAPI(kPathAuthorize) + "?" + values.Encode())
+	return nURL
+}
 
 // GetAppAccountToken 获取应用级账号 Token https://docs.qq.com/open/document/app/oauth2/app_account_token.html
 func (c *Client) GetAppAccountToken(ctx context.Context) (token *Token, err error) {

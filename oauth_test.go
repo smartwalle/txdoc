@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+func TestClient_GetAuthorizeURL(t *testing.T) {
+	t.Log(client.GetAuthorizeURL("http://www.baidu.com", "xxx"))
+}
+
 func TestClient_GetAppAccountToken(t *testing.T) {
 	t.Log(client.GetAppAccountToken(context.Background()))
 }
