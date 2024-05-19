@@ -16,3 +16,7 @@ func TestClient_GetToken(t *testing.T) {
 func TestClient_RefreshToken(t *testing.T) {
 	t.Log(client.RefreshToken(context.Background(), "sss"))
 }
+
+func TestClient_GetUserInfo(t *testing.T) {
+	t.Log(client.GetUserInfo(context.Background(), "sss"))
+}

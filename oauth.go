@@ -10,6 +10,7 @@ import (
 const (
 	kPathOAuthAccountToken = "/oauth/v2/app-account-token"
 	kPathOAuthToken        = "/oauth/v2/token"
+	kPathUserInfo          = "/oauth/v2/userinfo"
 )
 
 const (
@@ -61,4 +62,20 @@ func (c *Client) RefreshToken(ctx context.Context, refreshToken string) (token *
 	token.RefreshToken = refreshToken
 	token.ExpiresTime = time.Now().Unix() + int64(token.ExpiresIn) - 30 // token 过期检测时间减少 30 秒
 	return token, nil
+}
+
+// GetUserInfo 获取用户信息 https://docs.qq.com/open/document/app/oauth2/user_info.html
+func (c *Client) GetUserInfo(ctx context.Context, accessToken string) (*GetUserResponse, error) {
+	var values = url.Values{}
+	values.Set("access_token", accessToken)
+
+	var aux = struct {
+		Error
+		Data GetUserResponse `json:"data"`
+	}{}
+	if err := c.request(ctx, http.MethodGet, c.buildAPI(kPathUserInfo), nil, values, nil, &aux); err != nil {
+		return nil, err
+	}
+	aux.Data.Error = aux.Error
+	return &aux.Data, nil
 }
