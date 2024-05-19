@@ -38,6 +38,7 @@ func (doc Document) AddCollaborators(ctx context.Context, fileId string, param A
 	return result, nil
 }
 
+// DeleteCollaborators 移除协作成员 https://docs.qq.com/open/document/app/openapi/v2/file/files/collaborators/delete.html
 func (doc Document) DeleteCollaborators(ctx context.Context, fileId, openId string) (result *DeleteCollaboratorsResponse, err error) {
 	var values = url.Values{}
 	values.Set("type", string(CollaboratorTypeUser))
