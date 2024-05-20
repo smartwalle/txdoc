@@ -9,7 +9,7 @@ import (
 
 const (
 	kHeaderAccessToken = "Access-Token"
-	kHeaderClientId    = "client-Id"
+	kHeaderClientId    = "Client-Id"
 	kHeaderOpenId      = "Open-Id"
 )
 
