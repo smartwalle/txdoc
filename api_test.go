@@ -5,4 +5,4 @@ var (
 	kTestAccessToken = ""
 )
 
-var document = client.Document(kTestOpenId, kTestAccessToken)
+var api = client.API(kTestOpenId, kTestAccessToken)

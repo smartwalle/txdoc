@@ -76,14 +76,13 @@ func (c *Client) request(ctx context.Context, method, url string, header http.He
 	}
 	defer rsp.Body.Close()
 
-	//fmt.Println(rsp.StatusCode)
-	//fmt.Println(string(data))
+	//fmt.Println(url, rsp.StatusCode)
 
 	switch rsp.StatusCode {
 	case http.StatusOK:
 		return json.NewDecoder(rsp.Body).Decode(result)
 	default:
-		return Error{Ret: http.StatusUnauthorized, Msg: http.StatusText(http.StatusUnauthorized)}
+		return Error{Code: Code(rsp.StatusCode), Message: http.StatusText(rsp.StatusCode)}
 		//case http.StatusAccepted:
 		//	return nil
 		//case http.StatusUnauthorized:

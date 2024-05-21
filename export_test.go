@@ -5,10 +5,24 @@ import (
 	"testing"
 )
 
-func TestDocument_AsyncExport(t *testing.T) {
-	t.Log(document.AsyncExport(context.Background(), "sss", ""))
+func TestAPI_AsyncExport(t *testing.T) {
+	var rsp, err = api.AsyncExport(context.Background(), "sss", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Error)
+	}
+	t.Log(rsp)
 }
 
-func TestDocument_GetExportProgress(t *testing.T) {
-	t.Log(document.GetExportProgress(context.Background(), "sss", "sss"))
+func TestAPI_GetExportProgress(t *testing.T) {
+	var rsp, err = api.GetExportProgress(context.Background(), "sss", "sss")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Error)
+	}
+	t.Log(rsp)
 }

@@ -6,10 +6,11 @@ import (
 	"txdoc"
 )
 
-func TestClient_CreateFile(t *testing.T) {
+func TestAPI_CreateFile(t *testing.T) {
 	var param = txdoc.CreateFileParam{}
 	param.Title = "testfile"
-	var rsp, err = document.CreateFile(context.Background(), param)
+
+	var rsp, err = api.CreateFile(context.Background(), param)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -19,8 +20,8 @@ func TestClient_CreateFile(t *testing.T) {
 	t.Log(rsp.Title)
 }
 
-func TestClient_GetFile(t *testing.T) {
-	var rsp, err = document.GetFile(context.Background(), "fileid")
+func TestAPI_GetFile(t *testing.T) {
+	var rsp, err = api.GetFile(context.Background(), "fileid")
 	if err != nil {
 		t.Fatal(err)
 	}

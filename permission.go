@@ -13,12 +13,12 @@ const (
 )
 
 // GetCollaborators 查询协作成员 https://docs.qq.com/open/document/app/openapi/v2/file/files/collaborators/get.html
-func (doc Document) GetCollaborators(ctx context.Context, fileId string) (result *GetCollaboratorsResponse, err error) {
+func (api API) GetCollaborators(ctx context.Context, fileId string) (*GetCollaboratorsResponse, error) {
 	var aux = struct {
 		Error
 		Data GetCollaboratorsResponse `json:"data"`
 	}{}
-	if err := doc.request(ctx, http.MethodGet, doc.buildAPI(kPathFiles, fileId, kPathCollaborators), nil, nil, &aux); err != nil {
+	if err := api.request(ctx, http.MethodGet, api.buildAPI(kPathV2Files, fileId, kPathCollaborators), nil, nil, &aux); err != nil {
 		return nil, err
 	}
 	aux.Data.Error = aux.Error
@@ -26,26 +26,36 @@ func (doc Document) GetCollaborators(ctx context.Context, fileId string) (result
 }
 
 // AddCollaborators 添加协作成员 https://docs.qq.com/open/document/app/openapi/v2/file/files/collaborators/add.html
-func (doc Document) AddCollaborators(ctx context.Context, fileId string, param AddCollaboratorsParam) (result *AddCollaboratorsResponse, err error) {
+func (api API) AddCollaborators(ctx context.Context, fileId string, param AddCollaboratorsParam) (*AddCollaboratorsResponse, error) {
 	data, err := json.Marshal(param)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = doc.request(ctx, http.MethodPatch, doc.buildAPI(kPathFiles, fileId, kPathCollaborators), nil, bytes.NewReader(data), &result); err != nil {
+	var aux = struct {
+		Error
+		Data AddCollaboratorsResponse `json:"data"`
+	}{}
+	if err = api.request(ctx, http.MethodPatch, api.buildAPI(kPathV2Files, fileId, kPathCollaborators), nil, bytes.NewReader(data), &aux); err != nil {
 		return nil, err
 	}
-	return result, nil
+	aux.Data.Error = aux.Error
+	return &aux.Data, nil
 }
 
 // DeleteCollaborators 移除协作成员 https://docs.qq.com/open/document/app/openapi/v2/file/files/collaborators/delete.html
-func (doc Document) DeleteCollaborators(ctx context.Context, fileId, openId string) (result *DeleteCollaboratorsResponse, err error) {
+func (api API) DeleteCollaborators(ctx context.Context, fileId, openId string) (*DeleteCollaboratorsResponse, error) {
 	var values = url.Values{}
 	values.Set("type", string(CollaboratorTypeUser))
 	values.Set("id", openId)
 
-	if err = doc.request(ctx, http.MethodDelete, doc.buildAPI(kPathFiles, fileId, kPathCollaborators), values, nil, &result); err != nil {
+	var aux = struct {
+		Error
+		Data DeleteCollaboratorsResponse `json:"data"`
+	}{}
+	if err := api.request(ctx, http.MethodDelete, api.buildAPI(kPathV2Files, fileId, kPathCollaborators), values, nil, &aux); err != nil {
 		return nil, err
 	}
-	return result, nil
+	aux.Data.Error = aux.Error
+	return &aux.Data, nil
 }
