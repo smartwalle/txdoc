@@ -76,8 +76,6 @@ func (c *Client) request(ctx context.Context, method, url string, header http.He
 	}
 	defer rsp.Body.Close()
 
-	//fmt.Println(url, rsp.StatusCode)
-
 	switch rsp.StatusCode {
 	case http.StatusOK:
 		return json.NewDecoder(rsp.Body).Decode(result)

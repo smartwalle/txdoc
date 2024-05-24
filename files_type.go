@@ -36,6 +36,9 @@ type File struct {
 	CreatorName           string `json:"creatorName"`
 	IsOwner               bool   `json:"isOwner"`
 	OwnerName             string `json:"ownerName"`
+	OwnerID               string `json:"ownerID"`
+	Tenant                string `json:"tenant"`
+	ParentFolderID        string `json:"parentFolderID"`
 	LastModifyTime        int64  `json:"lastModifyTime"`
 	LastModifyName        string `json:"lastModifyName"`
 	FormCollectingStatus  string `json:"formCollectingStatus"`

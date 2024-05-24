@@ -12,12 +12,12 @@ const (
 // GetDocument 获取 Doc 文档内容 https://docs.qq.com/open/document/app/openapi/v3/doc/get/get.html
 func (api API) GetDocument(ctx context.Context, fileId string) (*GetDocumentResponse, error) {
 	var aux = struct {
-		Error
+		ErrorV3
 		Document GetDocumentResponse `json:"document"`
 	}{}
-	if err := api.request(ctx, http.MethodPost, api.buildAPI(kPathV3Doc, fileId), nil, nil, &aux); err != nil {
+	if err := api.request(ctx, http.MethodGet, api.buildAPI(kPathV3Doc, fileId), nil, nil, &aux); err != nil {
 		return nil, err
 	}
-	aux.Document.Error = aux.Error
+	aux.Document.Error = aux.ErrorV3.Error()
 	return &aux.Document, nil
 }

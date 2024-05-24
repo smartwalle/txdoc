@@ -1,9 +1,6 @@
 package txdoc
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "fmt"
 
 const (
 	kProductionGateway = "https://docs.qq.com"
@@ -24,8 +21,8 @@ const (
 )
 
 type Error struct {
-	Code    Code   `json:"code"`
-	Message string `json:"message"`
+	Code    Code   `json:"ret"`
+	Message string `json:"msg"`
 }
 
 func (e Error) Error() string {
@@ -40,24 +37,11 @@ func (e Error) IsFailure() bool {
 	return e.Code.IsFailure()
 }
 
-func (e *Error) UnmarshalJSON(b []byte) error {
-	var aux = struct {
-		Ret     Code   `json:"ret"`
-		Msg     string `json:"msg"`
-		Code    Code   `json:"code"`
-		Message string `json:"message"`
-	}{}
+type ErrorV3 struct {
+	Code    Code   `json:"code"`
+	Message string `json:"message"`
+}
 
-	if err := json.Unmarshal(b, &aux); err != nil {
-		return err
-	}
-
-	if aux.Ret > 0 {
-		e.Code = aux.Ret
-		e.Message = aux.Msg
-	} else if aux.Code > 0 {
-		e.Code = aux.Code
-		e.Message = aux.Message
-	}
-	return nil
+func (v3 ErrorV3) Error() Error {
+	return Error{Code: v3.Code, Message: v3.Message}
 }
